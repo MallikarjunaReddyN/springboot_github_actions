@@ -30,6 +30,7 @@ jobs:
   build:
     name: Gradle build
     runs-on: ubuntu-latest
+    needs: test
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
