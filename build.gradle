@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.5.5'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jacoco'
 	id "org.sonarqube" version "3.3"
 }
 
@@ -18,11 +19,47 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+jacoco {
+	toolVersion = "0.8.5"
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled true
+		csv.enabled false
+		html.enabled true
+		html.destination file("$buildDir/reports/jacoco")
+	}
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			enabled = true
+			limit {
+				counter = 'BRANCH'
+				minimum = 0.80
+			}
+			excludes = []
+		}
+
+		rule {
+			enabled = true
+			limit {
+				counter = 'LINE'
+				minimum = 0.80
+			}
+			excludes = []
+		}
+	}
+}
+
 sonarqube {
 	properties {
 		property "sonar.projectKey", "MallikarjunaReddyN_springboot_github_actions"
 		property "sonar.organization", "mallikarjunareddyn"
 		property "sonar.host.url", "https://sonarcloud.io"
+		property "sonar.coverage.jacoco.xmlReportPaths", "${rootProject.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
 	}
 }
 
